@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/street_address.rb",
+     "street_address.gemspec",
      "test/helper.rb",
      "test/test_street_address.rb"
   ]
