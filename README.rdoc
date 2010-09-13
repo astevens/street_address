@@ -1,17 +1,11 @@
-= street_address
+A port of the GEO::StreetAddress::US Perl Library. http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/US.pm
 
-Description goes here.
+=Use it
+>> StreetAddress.parse("123 Fake St. South Chicago, IL, 90210")
+=> {"city"=>"Chicago", "number"=>"123", "zip"=>"90210", "prefix"=>"", "street"=>"Fake", "type"=>"St", "suffix"=>"S", "state"=>"IL"}
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Please feel free to do whatever you'd like with it, and if you find it useful let me know.
 
-== Copyright
-
-Copyright (c) 2010 Andrew Stevens. See LICENSE for details.
+Cheers,
+Jeremy Hubert 
+http://jeremyhubert.com
