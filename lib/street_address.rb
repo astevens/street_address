@@ -467,10 +467,18 @@ module StreetAddress
   }
 
   RegExs["place"] = Regexp.new('(?:([^\d,]+?)\W+ ('+RegExs['state'].to_s+')\W*)? '+RegExs['zip'].to_s+'',Regexp::IGNORECASE)
+  RegExs["street"] = Regexp.new('(?:(?:(' + 
+                                RegExs['direct'].to_s + ')\W+ (' + 
+                                RegExs['type'].to_s + ')\b\s*)|(?:(' + 
+                                RegExs['direct'].to_s + ')\W+ )?(?:([^,]+)(?:[^\w,]+(' + 
+                                RegExs['type'].to_s + ')\b\s*)(?:[^\w,]*(' + 
+                                RegExs['direct'].to_s + ')\b\s*)?|([^,]*\d)(' + 
+                                RegExs['direct'].to_s + ')\b|([^,]+?)(?:[^\w,]+(' + 
+                                RegExs['type'].to_s + ')\b\s*)?(?:[^\w,]*(' + 
+                                RegExs['direct'].to_s + ')\b )?))',
+                                Regexp::IGNORECASE)
   
-  RegExs["street"] = Regexp.new('(?:(?:(' + RegExs['direct'].to_s + ')\W+ (' + RegExs['type'].to_s + ')\b )|(?:(' + RegExs['direct'].to_s + ')\W+ )?(?:([^,]+)(?:[^\w,]+(' + RegExs['type'].to_s + ')\b )(?:[^\w,]+(' + RegExs['direct'].to_s + ')\b )?|([^,]*\d)(' + RegExs['direct'].to_s + ')\b|([^,]+?)(?:[^\w,]+(' + RegExs['type'].to_s + ')\b )?(?:[^\w,]+(' + RegExs['direct'].to_s + ')\b )?))',Regexp::IGNORECASE)
-  
-  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W+(?:' + RegExs['unit'].to_s + '\W+)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
+  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W*(?:' + RegExs['unit'].to_s + '\W+)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
 
   NormalizeMap = {
     'prefix'  => Directional,
