@@ -463,7 +463,8 @@ module StreetAddress
     "dircode" => Regexp.new(Directional_code.keys * '\.?|',Regexp::IGNORECASE),
     "zip" => /((?:\d{5}(?:-\d{4})?)|(?:\w\d\w\s?\d\w\d))?/i,
     "unit" => /(?:(?:su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|ro*m|fl|apt|unit|box)\W+|\#\W*)[\w-]+/i,
-    "corner" => /(?:\band\b|\bat\b|&|\@)/i
+    "corner" => /(?:\band\b|\bat\b|&|\@)/i,
+    "justastreet" => /(?:\b[\w\s]+)/i
   }
 
   RegExs["place"] = Regexp.new('(?:([^\d,]+?)\W+ ('+RegExs['state'].to_s+')\W*)? '+RegExs['zip'].to_s+'',Regexp::IGNORECASE)
@@ -478,7 +479,7 @@ module StreetAddress
                                 RegExs['direct'].to_s + ')\b )?))',
                                 Regexp::IGNORECASE)
   
-  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W*(?:' + RegExs['unit'].to_s + '\W+)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
+  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W*(?:' + RegExs['unit'].to_s + '\W*)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
 
   NormalizeMap = {
     'prefix'  => Directional,

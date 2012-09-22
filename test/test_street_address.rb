@@ -24,4 +24,13 @@ class TestStreetAddress < Test::Unit::TestCase
   should "parse addresses with arbitrary spacing" do
     assert_equal({"number"=>"123", "prefix"=>"e", "street"=>"fake", "type"=>"st", "suffix"=>"n", "city"=>"santa rosa", "state"=>"ca", "zip"=>"94410"}, StreetAddress.parse('123    e.    fake   st.   n.,   santa rosa,    ca     94410'))
   end
+
+  should "parse some non standard street suffixes" do
+    assert_equal({"number"=>"226", "prefix"=>"", "street"=>"Paseo Bernal", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('226 Paseo Bernal'))
+  end
+  should "parse some non standard apt suffixes" do
+    assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street #414,'))
+    assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street #414'))
+    assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street Apt. 414'))
+  end
 end
