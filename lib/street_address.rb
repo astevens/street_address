@@ -456,21 +456,35 @@ module StreetAddress
 
   RegExs = {
     "type" => Regexp.new(StreetTypes_list * '|',Regexp::IGNORECASE),
-    "number" => /\d+-?\d*/,
+    "number" => /\d+-?\d*[a-z]*/i,
     "fraction" => /\d+\/\d+/,
     "state" => Regexp.new(StateCodes.values * '|' + '|' + StateCodes.keys * '|',Regexp::IGNORECASE),
     "direct" => Regexp.new(Directional.keys * '|' + '|' + Directional.values * '\.?|',Regexp::IGNORECASE),
     "dircode" => Regexp.new(Directional_code.keys * '\.?|',Regexp::IGNORECASE),
     "zip" => /((?:\d{5}(?:-\d{4})?)|(?:\w\d\w\s?\d\w\d))?/i,
     "unit" => /(?:(?:su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|ro*m|fl|apt|unit|box)\W+|\#\W*)[\w-]+/i,
-    "corner" => /(?:\band\b|\bat\b|&|\@)/i
+    "corner" => /(?:\band\b|\bat\b|&|\@)/i,
+    "justastreet" => /(?:\b[\w\s]+)/i
   }
 
   RegExs["place"] = Regexp.new('(?:([^\d,]+?)\W+ ('+RegExs['state'].to_s+')\W*)? '+RegExs['zip'].to_s+'',Regexp::IGNORECASE)
+  RegExs["street"] = Regexp.new('(?:
+                                (?:
+                                (' + 
+                                RegExs['direct'].to_s + ')\W+ (' + 
+                                RegExs['type'].to_s + ')\b\s*)
+                                |(?:(' + 
+                                RegExs['direct'].to_s + ')\W+ )?(?:([^,]+)(?:[^\w,]+(' + 
+                                RegExs['type'].to_s + ')\b\s*)(?:[^\w,]*(' + 
+                                RegExs['direct'].to_s + ')\b\s*)?
+                                |([^,]*\d)(' + 
+                                RegExs['direct'].to_s + ')\b
+                                |([^,]+?)(?:[^\w,]+(' + 
+                                RegExs['type'].to_s + ')\b\s*)?(?:[^\w,]*(' + 
+                                RegExs['direct'].to_s + ')\b )?))',
+                                Regexp::IGNORECASE)
   
-  RegExs["street"] = Regexp.new('(?:(?:(' + RegExs['direct'].to_s + ')\W+ (' + RegExs['type'].to_s + ')\b )|(?:(' + RegExs['direct'].to_s + ')\W+ )?(?:([^,]+)(?:[^\w,]+(' + RegExs['type'].to_s + ')\b )(?:[^\w,]+(' + RegExs['direct'].to_s + ')\b )?|([^,]*\d)(' + RegExs['direct'].to_s + ')\b|([^,]+?)(?:[^\w,]+(' + RegExs['type'].to_s + ')\b )?(?:[^\w,]+(' + RegExs['direct'].to_s + ')\b )?))',Regexp::IGNORECASE)
-  
-  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W+(?:' + RegExs['unit'].to_s + '\W+)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
+  RegExs["address"] = Regexp.new('^\W*(' + RegExs['number'].to_s + ')\W*(?:' + RegExs['fraction'].to_s + '\W*)?' + RegExs['street'].source + '\W*(?:' + RegExs['unit'].to_s + '\W*)?' + RegExs['place'].source + '\W*$',Regexp::EXTENDED)
 
   NormalizeMap = {
     'prefix'  => Directional,
@@ -503,9 +517,8 @@ module StreetAddress
   def StreetAddress.normalize(result)
     
     result.map { |x| x.gsub!(/^\s+|\s+$|[^\w\s\-]/s,'') unless x.nil? }
-    
     address = {
-            'number' => result[0].to_s,
+            'number' => result[0].to_i.to_s,
             'prefix' => result[3].to_s,
             'street' => result[4].to_s,
             'type' =>  result[5].to_s,
@@ -514,6 +527,9 @@ module StreetAddress
             'state' => result[13].to_s,
             'zip' => result[14].to_s
           }
+          #workaround for shit like '123 paseo bernal' and other non english street names
+          address['street'] = result[9].to_s if address['street'].empty? && result[9]
+          address['street'] += result[11].to_s if result[9] && result[11]
 
     NormalizeMap.map do | k,v |
       if !address[k].nil?
