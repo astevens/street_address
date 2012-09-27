@@ -18,6 +18,7 @@ class TestStreetAddress < Test::Unit::TestCase
 
   should "parse addresses of various formats" do
     assert_equal({"number"=>"123", "prefix"=>"e", "street"=>"fake", "type"=>"st", "suffix"=>"n", "city"=>"santa rosa", "state"=>"ca", "zip"=>"94410"}, StreetAddress.parse('123 e fake st n, santa rosa, ca, 94410'))
+    assert_equal({"number"=>"123", "prefix"=>"e", "street"=>"fake", "type"=>"st", "suffix"=>"n", "city"=>"sante", "state"=>"ca", "zip"=>"94410"}, StreetAddress.parse('123 e fake st n, sante, ca, 94410'))
     assert_equal({"number"=>"123", "prefix"=>"e", "street"=>"fake", "type"=>"st", "suffix"=>"n", "city"=>"santa rosa", "state"=>"CA", "zip"=>"94410"}, StreetAddress.parse('123 e fake st n, santa rosa, CALIFORNIA 94410'))
   end
 
@@ -26,12 +27,13 @@ class TestStreetAddress < Test::Unit::TestCase
   end
 
   should "parse some non standard street suffixes" do
-    assert_equal({"number"=>"226", "prefix"=>"", "street"=>"Paseo Bernal", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('226 Paseo Bernal, san francisco, ca 94111'))
     assert_equal({"number"=>"226", "prefix"=>"", "street"=>"Paseo Bernal", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('226 Paseo Bernal'))
+    assert_equal({"number"=>"3902", "prefix"=>"", "street"=>"Paseo Grande", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('3902 Paseo Grande'))
   end
   should "parse some non standard apt suffixes" do
     assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street #414,'))
     assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street #414'))
     assert_equal({"number"=>"829", "prefix"=>"", "street"=>"Folsom", "type"=>"st", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('829 Folsom Street Apt. 414'))
+    assert_equal({"number"=>"16", "prefix"=>"", "street"=>"Lexington", "type"=>"ave", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('16A Lexington ave.'))
   end
 end

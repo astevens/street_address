@@ -528,6 +528,9 @@ module StreetAddress
             'state' => result[13].to_s,
             'zip' => result[14].to_s
           }
+          #workaround for shit like '123 paseo bernal' and other non english street names
+          address['street'] = result[9].to_s if address['street'].empty? && result[9]
+          address['street'] += result[11].to_s if result[9] && result[11]
 
     NormalizeMap.map do | k,v |
       if !address[k].nil?
