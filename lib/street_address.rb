@@ -468,13 +468,18 @@ module StreetAddress
   }
 
   RegExs["place"] = Regexp.new('(?:([^\d,]+?)\W+ ('+RegExs['state'].to_s+')\W*)? '+RegExs['zip'].to_s+'',Regexp::IGNORECASE)
-  RegExs["street"] = Regexp.new('(?:(?:(' + 
+  RegExs["street"] = Regexp.new('(?:
+                                (?:
+                                (' + 
                                 RegExs['direct'].to_s + ')\W+ (' + 
-                                RegExs['type'].to_s + ')\b\s*)|(?:(' + 
+                                RegExs['type'].to_s + ')\b\s*)
+                                |(?:(' + 
                                 RegExs['direct'].to_s + ')\W+ )?(?:([^,]+)(?:[^\w,]+(' + 
                                 RegExs['type'].to_s + ')\b\s*)(?:[^\w,]*(' + 
-                                RegExs['direct'].to_s + ')\b\s*)?|([^,]*\d)(' + 
-                                RegExs['direct'].to_s + ')\b|([^,]+?)(?:[^\w,]+(' + 
+                                RegExs['direct'].to_s + ')\b\s*)?
+                                |([^,]*\d)(' + 
+                                RegExs['direct'].to_s + ')\b
+                                |([^,]+?)(?:[^\w,]+(' + 
                                 RegExs['type'].to_s + ')\b\s*)?(?:[^\w,]*(' + 
                                 RegExs['direct'].to_s + ')\b )?))',
                                 Regexp::IGNORECASE)
@@ -512,7 +517,7 @@ module StreetAddress
   def StreetAddress.normalize(result)
     
     result.map { |x| x.gsub!(/^\s+|\s+$|[^\w\s\-]/s,'') unless x.nil? }
-    
+    puts result.inspect 
     address = {
             'number' => result[0].to_s,
             'prefix' => result[3].to_s,

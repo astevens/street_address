@@ -26,6 +26,7 @@ class TestStreetAddress < Test::Unit::TestCase
   end
 
   should "parse some non standard street suffixes" do
+    assert_equal({"number"=>"226", "prefix"=>"", "street"=>"Paseo Bernal", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('226 Paseo Bernal, san francisco, ca 94111'))
     assert_equal({"number"=>"226", "prefix"=>"", "street"=>"Paseo Bernal", "type"=>"", "suffix"=>"", "city"=>"", "state"=>"", "zip"=>""}, StreetAddress.parse('226 Paseo Bernal'))
   end
   should "parse some non standard apt suffixes" do
