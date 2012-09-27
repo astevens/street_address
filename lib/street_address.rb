@@ -456,7 +456,7 @@ module StreetAddress
 
   RegExs = {
     "type" => Regexp.new(StreetTypes_list * '|',Regexp::IGNORECASE),
-    "number" => /\d+-?\d*/,
+    "number" => /\d+-?\d*[a-z]*/i,
     "fraction" => /\d+\/\d+/,
     "state" => Regexp.new(StateCodes.values * '|' + '|' + StateCodes.keys * '|',Regexp::IGNORECASE),
     "direct" => Regexp.new(Directional.keys * '|' + '|' + Directional.values * '\.?|',Regexp::IGNORECASE),
@@ -517,9 +517,8 @@ module StreetAddress
   def StreetAddress.normalize(result)
     
     result.map { |x| x.gsub!(/^\s+|\s+$|[^\w\s\-]/s,'') unless x.nil? }
-    puts result.inspect 
     address = {
-            'number' => result[0].to_s,
+            'number' => result[0].to_i.to_s,
             'prefix' => result[3].to_s,
             'street' => result[4].to_s,
             'type' =>  result[5].to_s,
