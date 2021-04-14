@@ -524,7 +524,7 @@ module StreetAddress
 #   Expand 'S. Vancouver' to 'South Vancouver', I think. Commented out until I understand it.
 #   address['city'].gsub!(Regexp.new('^('+RegExs['dircode'].to_s+')\s+(?=\S)'),Directional_code['\1.downcase']) if address['city']
 
-    address['zip'].gsub!(/-.*$/s,'') if address['zip']
+    address['zip'] = address['zip'].gsub(/-.*$/s,'') if address['zip']
 
     address
   end
